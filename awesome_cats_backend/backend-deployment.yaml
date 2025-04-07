@@ -1,0 +1,42 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: backend-deployment 
+  labels: 
+    app: backend 
+spec: 
+  replicas: 2 
+  selector: 
+    matchLabels: 
+      app: backend 
+  template: 
+    metadata: 
+      labels: 
+        app: backend 
+    spec: 
+      containers: 
+        - name: backend 
+          image: samarbekova/latest:backend
+          ports: 
+            - containerPort: 3000 
+          env: 
+            - name: PGHOST 
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: hostname 
+            - name: PGUSER 
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: username 
+            - name: PGPASSWORD 
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: password 
+            - name: PGDATABASE 
+              valueFrom: 
+                secretKeyRef: 
+                  name: db-secret 
+                  key: database
